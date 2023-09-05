@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #qrcode-container {
+            display: none;
+            margin-top: 20px;
+        }
+        #qrcode {
+            display: flex;
+            justify-content: center;
+        }
+        #instructions {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <header class="orionlabs">
+        <div class="header-logo">
+            <a href="www.orionlabs.in"><img src="./image/orionlab-logo.webp" alt="logo"></a>
+        </div>
+    </header>
+    <h1>QR Code Generator</h1>
+    <input type="text" id="text" placeholder="Enter text or URL">
+    <button onclick="makeCode()">Generate QR Code</button>
+    
+    <button onclick="downloadQRCode()">Download QR Code</button>
+    <div id="qrcode-container"> <!-- Container for QR code -->
+        <div id="qrcode"></div>
+    </div>
+    <div id="instructions">
+        <p>Instructions:</p>
+        <ol>
+            <li>Enter the text or URL you want to encode in the input field above.</li>
+            <li>Click the "Generate QR Code" button to create the QR code.</li>
+            <li>The generated QR code will be displayed below.</li>
+            <li>Click the "Download QR Code" button to save it as an image.</li>
+        </ol>
+    </div>
+    
+
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var qrcode = new QRCode("qrcode");
+
+        function makeCode() {
+            var elText = document.getElementById("text");
+            var qrcodeContainer = document.getElementById("qrcode-container");
+
+            if (!elText.value) {
+                alert("Input a text");
+                elText.focus();
+                return;
+            }
+
+            qrcode.makeCode(elText.value);
+
+            // Show the QR code container
+            qrcodeContainer.style.display = "block";
+        }
+
+        function downloadQRCode() {
+            // Get the QR code image element
+            var qrCodeImage = document.getElementById("qrcode").getElementsByTagName("img")[0];
+
+            // Create a temporary link element
+            var link = document.createElement("a");
+            link.href = qrCodeImage.src;
+            link.download = "qrcode.png"; // Set the desired filename
+
+            // Trigger a click event to start the download
+            link.click();
+        }
+
+        $("#text")
+            .on("blur", function () {
+                makeCode();
+            })
+            .on("keydown", function (e) {
+                if (e.keyCode == 13) {
+                    makeCode();
+                }
+            });
+    </script>
+</body>
+</html>
